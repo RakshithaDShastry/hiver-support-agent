@@ -1,0 +1,5 @@
+tweet_id,final_judge_score,final_justification,claims_found
+2317240,2,"The reply promises to resolve the issue, which cannot be guaranteed.",We'll take a look and help get everything sorted.
+1302813,2,"The reply promises assistance that cannot be guaranteed, triggering the lower score limit.","""We’ll take a look and help you sort it out."""
+573781,2,"The reply promises immediate action, which cannot be guaranteed.",We'll take a look right away.
+670534,2,"The reply includes a speculative technical explanation and a promise to achieve a specific outcome, which cannot be verified or guaranteed.",It sounds like the country field is defaulting to Hong Kong when you sign up; We’ll look into why that’s happening and help you get the correct country set up.
