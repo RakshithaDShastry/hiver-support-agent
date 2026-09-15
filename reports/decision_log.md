@@ -74,3 +74,14 @@ behind each.
     examples that aren't actually relevant**, rather than trusting the
     retrieval step's top-k blindly, since retrieval quality is known to be
     imperfect (see decision 9/10).
+
+13. **Redesigned the LLM judge after blind human validation revealed it was
+    badly miscalibrated** (correlation -0.16 against 20 blind human scores).
+    The original judge's prompt stated that invented/unverifiable claims
+    should be penalized, but it wasn't actually enforcing that — tone and
+    topical relevance dominated its scoring instead. Fixed by forcing an
+    explicit "list unverifiable claims first, then score" reasoning step
+    with a hard cap, which brought within-1-point agreement from 55% to 80%
+    and correlation to +0.63 on the same validation set. This is disclosed
+    as a finding, not smoothed over, since it materially changes how
+    trustworthy the original headline reply-quality number was.

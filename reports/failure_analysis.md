@@ -70,5 +70,39 @@ specific, time/context-bound details (links, ticket numbers, names) need to
 be filtered out of retrieved context before use, not just the prose content
 trusted wholesale.
 
-*(2 more failure patterns to be added after the escalation-policy stage is
-built and evaluated.)*
+## Pattern 4: The first LLM-judge design was miscalibrated — it didn't
+enforce its own stated criteria
+Initial judge scores averaged 4.86/5 across 50 replies — suspiciously high.
+Blind human validation on a 20-example subset (scored without seeing judge
+output) found: exact match 30%, within-1-point agreement 55%, correlation
+**-0.16** (essentially no positive relationship, bordering on inverted).
+
+**Root cause:** every 2+ point disagreement had the same shape — a reply
+made a confident, specific, unverifiable claim or promise (e.g. "we're
+working on it as we speak", "we'll make sure you won't be charged",
+"hoping to add it soon", a confidently-stated but ungrounded technical
+explanation), and the judge scored it 5 anyway because it sounded polite
+and on-topic. The judge's original prompt explicitly said "invents nothing"
+should score low, but the model wasn't actually applying that criterion —
+tone and topical relevance dominated its impression instead.
+
+**Fix:** redesigned the judge to explicitly list unverifiable claims/promises
+as a separate reasoning step *before* scoring, with a hard rule: any
+unverifiable claim caps the score at 2, regardless of tone. Re-scored the
+same 20 human-validated examples:
+- Exact match: 30% → 45%
+- Within-1-point agreement: 55% → 80%
+- Correlation: -0.16 → +0.63
+- Judge mean: 4.85 → 2.90 (much closer to the 3.55 human mean)
+
+**Implication:** an LLM judge given the right criteria in its prompt does
+not automatically apply them — telling it to penalize hallucination is not
+the same as it actually doing so. Forcing explicit intermediate reasoning
+(list the problem, then score) measurably improved reliability. This also
+means the original 4.86 headline "reply quality" number was never
+trustworthy and should not be cited on its own.
+
+**Known limitation:** re-validation reused the same 20 examples used to
+diagnose the problem, which could inflate agreement somewhat versus a fully
+independent set — a fresh validation batch would strengthen this further
+(listed under "what's next").
