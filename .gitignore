@@ -1,0 +1,15 @@
+# Secrets
+.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Data (raw dataset is large — don't commit it; document how to fetch it instead)
+data/raw/*
+!data/raw/.gitkeep
+
+# OS
+.DS_Store
