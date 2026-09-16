@@ -1,8 +1,11 @@
+# Core (needed for the fast metrics reproduction path — scripts/compute_metrics.py)
 pandas>=2.0
 numpy>=1.24
 scikit-learn>=1.3
-anthropic>=0.34
-python-dotenv>=1.0
-tqdm>=4.66
-matplotlib>=3.7
+
+# Only needed for the OPTIONAL full pipeline regeneration path
+# (re-calling the LLM APIs from scratch — see README)
+groq>=0.9
 kagglehub>=0.3
+tqdm>=4.66
+python-dotenv>=1.0
