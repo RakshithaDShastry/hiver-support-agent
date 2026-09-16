@@ -106,3 +106,58 @@ trustworthy and should not be cited on its own.
 diagnose the problem, which could inflate agreement somewhat versus a fully
 independent set — a fresh validation batch would strengthen this further
 (listed under "what's next").
+
+**Further finding (second-order miscalibration):** running the fixed (v2)
+judge across the full 50-example eval sample produced a bimodal score
+distribution — 32 examples scored exactly 2, 16 scored exactly 5, almost
+none in between. Inspection showed the "cap at 2 if any unverifiable claim"
+rule was firing on honestly-hedged, appropriately uncertain replies (e.g.
+"we can't guarantee when or if a specific artist will be added", "no
+confirmed launch date yet") — normal, honest customer-support language, not
+false promises. This is a real over-triggering bias, distinct from the
+original under-triggering problem.
+
+A v3 judge was built to distinguish genuine false-certainty claims from
+honest hedging. It correctly fixed the specific over-triggering cases found
+(all 4 re-scored 2 → 5) and still correctly caught the genuine overpromising
+cases (account merging, refunds — still scored 2). However, re-validating
+v3 against the same 20 human-scored examples used for v2 showed **agreement
+regressed**: within-1-point agreement dropped from 80% to 50%, correlation
+from +0.63 to -0.09. The additional exceptions written into v3's prompt
+appear to have given the model room to also excuse some genuinely bad
+replies, not just the mild ones.
+
+**Decision:** v2 was kept as the reported judge (best directly-validated
+agreement with human judgment), rather than shipping v3 without adequate
+re-validation. This means the reported 3.04/5 mean reply-quality score
+likely **undercounts true quality somewhat**, since it inherits v2's known
+bias toward over-flagging honestly-hedged replies as false-certainty
+promises. This is disclosed here rather than smoothed over, since it
+directly affects how the headline reply-quality number should be read.
+
+## Pattern 5: Reply generation still overpromises on high-stakes,
+account-specific actions despite explicit instructions not to
+Across the full 50-example eval, the clearest *genuine* (not judge-artifact)
+failures involve the model promising specific outcomes it cannot actually
+guarantee, on account-altering actions:
+- A customer with 3 duplicate accounts asked for help — the reply promised
+  to "verify ownership... merge them or close the duplicates" and that
+  password reset "often gets you back in quickly."
+- A student-discount rejection with an incorrect charge — the reply
+  promised "I can check the status of your subscription and arrange a
+  refund," despite no actual authority to guarantee a refund outcome.
+- A simple duplicate-account request — the reply promised to "combine your
+  listening history and playlists into a single account," which Spotify's
+  actual systems cannot do.
+
+**Implication:** these are exactly the account-specific, action-requiring
+cases the escalation policy is supposed to catch — and it did correctly
+mark 2 of these 3 as ESCALATE. But the *drafted reply itself* still
+contains the overpromise, meaning a human reviewer would need to catch and
+rewrite it, not just approve/reject it. A more robust design would prevent
+the reply generator from making these promises in the first place (e.g. an
+explicit list of actions the bot cannot promise: merging accounts, refunds,
+guaranteed outcomes) rather than relying entirely on escalation as the only
+safety net.
+
+*(5 of 5 failure patterns documented.)*

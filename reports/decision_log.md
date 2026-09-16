@@ -85,3 +85,14 @@ behind each.
     and correlation to +0.63 on the same validation set. This is disclosed
     as a finding, not smoothed over, since it materially changes how
     trustworthy the original headline reply-quality number was.
+
+14. **Attempted a further judge fix (v3) to stop it over-flagging honestly-
+    hedged language as false-certainty promises, then reverted to v2 after
+    re-validation showed v3 regressed human-agreement** (within-1 agreement
+    80%→50%, correlation +0.63→-0.09), even though v3 correctly fixed the
+    specific over-triggering cases it was built for. Rather than ship an
+    unvalidated "improvement" or spend more of the project's limited time
+    iterating further, kept v2 as the reported judge and explicitly
+    disclosed its known bias (over-flags hedged uncertainty) in the failure
+    analysis, so the reply-quality headline number is read with that caveat
+    rather than presented as unqualified truth.
