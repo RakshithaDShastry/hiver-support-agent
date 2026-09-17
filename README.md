@@ -8,7 +8,7 @@ to auto-handle or escalate to a human — with a stated reason.
 
 **The full report — problem framing, results vs. baselines, failure
 analysis, and what's misleading about the headline numbers — is in
-[`reports/report.md`](reports/report.md).** This README covers setup and
+`reports/Hiver_SpotifyCares_Agent_Report.docx`.** This README covers setup and
 reproduction only.
 
 ## Quickstart — reproduce headline results in under 15 minutes
@@ -29,7 +29,7 @@ python scripts/compute_metrics.py
 This prints: the intent classifier's accuracy vs. both baselines (majority
 class, TF-IDF + Logistic Regression) with a full per-category breakdown,
 and the reply-drafting/escalation pipeline's judge scores and escalation
-split — reproducing the exact numbers cited in `reports/report.md`.
+split — reproducing the exact numbers cited in `reports/Hiver_SpotifyCares_Agent_Report.docx`.
 
 ## Optional: regenerate everything from scratch (calls real LLM APIs)
 
@@ -86,7 +86,7 @@ src/
 scripts/
   compute_metrics.py    # fast reproduction path (see Quickstart)
 reports/
-  report.md            # the actual report — read this first
+  Hiver_SpotifyCares_Agent_Report.docx   # the actual report — read this first
   taxonomy.md           # intent taxonomy with grounding evidence
   decision_log.md        # 14 non-obvious decisions and why
   failure_analysis.md    # top 5 failure patterns with real examples
